@@ -17,7 +17,7 @@ import imgComponent53 from "figma:asset/4db06d323b51658b3160642751a1dff35e2e6663
 
 // WhatsApp deep-link (same number/message used across the landing page)
 const WHATSAPP_EXPERT_URL =
-  'https://wa.me/971505269149?text=Hi%20Swiftrooms%2C%20I%27d%20like%20to%20speak%20with%20an%20expert%20about%20windows%2C%20doors%20or%20a%20glass%20room%20for%20my%20villa.';
+  'https://wa.me/447466754555?text=Hi%20Swiftrooms%2C%20I%27d%20like%20to%20speak%20with%20an%20expert%20about%20windows%2C%20doors%20or%20a%20glass%20room%20for%20my%20villa.';
 
 type ProjectType = 'Villa' | 'Apartment' | 'Garden Room' | 'Commercial';
 

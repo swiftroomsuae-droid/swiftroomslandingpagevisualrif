@@ -291,7 +291,7 @@ export function HeroSection({ enableVideo = false, videoUrl, mobileVideoUrl }: H
 
                     {/* Secondary CTA - WhatsApp Expert */}
                     <a
-                      href="https://wa.me/971505269149?text=Hi%20Swiftrooms%2C%20I%27d%20like%20to%20speak%20with%20an%20expert%20about%20windows%2C%20doors%20or%20a%20glass%20room%20for%20my%20villa."
+                      href="https://wa.me/447466754555?text=Hi%20Swiftrooms%2C%20I%27d%20like%20to%20speak%20with%20an%20expert%20about%20windows%2C%20doors%20or%20a%20glass%20room%20for%20my%20villa."
                       target="_blank"
                       rel="noopener noreferrer"
                       className="btn-whatsapp w-full shadow-lg"
@@ -314,7 +314,7 @@ export function HeroSection({ enableVideo = false, videoUrl, mobileVideoUrl }: H
                   {/* Desktop secondary/tertiary CTAs — the primary CTA is the form on the right */}
                   <div className="hidden lg:flex items-center gap-4 pt-5">
                     <a
-                      href="https://wa.me/971505269149?text=Hi%20Swiftrooms%2C%20I%27d%20like%20to%20speak%20with%20an%20expert%20about%20windows%2C%20doors%20or%20a%20glass%20room%20for%20my%20villa."
+                      href="https://wa.me/447466754555?text=Hi%20Swiftrooms%2C%20I%27d%20like%20to%20speak%20with%20an%20expert%20about%20windows%2C%20doors%20or%20a%20glass%20room%20for%20my%20villa."
                       target="_blank"
                       rel="noopener noreferrer"
                       className="btn-whatsapp shadow-lg"

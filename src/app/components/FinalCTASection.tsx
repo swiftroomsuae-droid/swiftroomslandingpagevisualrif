@@ -2,14 +2,14 @@ import { motion } from 'motion/react';
 import { ArrowRight, MessageCircle, MapPin, Star, CalendarCheck, Ruler, FileText, BookOpen } from 'lucide-react';
 
 const WHATSAPP_HREF =
-  'https://wa.me/971505269149?text=Hi%20Swiftrooms%2C%20I%27d%20like%20to%20speak%20with%20an%20expert%20about%20windows%2C%20doors%20or%20a%20glass%20room%20for%20my%20villa.';
+  'https://wa.me/447466754555?text=Hi%20Swiftrooms%2C%20I%27d%20like%20to%20speak%20with%20an%20expert%20about%20windows%2C%20doors%20or%20a%20glass%20room%20for%20my%20villa.';
 const SHOWROOM_MAPS_HREF =
   'https://maps.google.com/?q=ETJAR+J1+Complex+Block+A+Warehouse+11-12+Jebel+Ali+Industrial+Area+1+Dubai';
 
 // Low-friction lead magnets for visitors not ready to enquire.
 // Each opens WhatsApp with a tailored request so the team can follow up.
 const waMagnet = (intent: string) =>
-  `https://wa.me/971505269149?text=${encodeURIComponent(`Hi Swiftrooms, I'd like to request: ${intent}.`)}`;
+  `https://wa.me/447466754555?text=${encodeURIComponent(`Hi Swiftrooms, I'd like to request: ${intent}.`)}`;
 
 const leadMagnets = [
   { icon: FileText, label: 'Free Project Cost Guide', href: waMagnet('the free project cost guide') },

@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { MessageCircle } from 'lucide-react';
 
 const WHATSAPP_HREF =
-  'https://wa.me/971505269149?text=Hi%20Swiftrooms%2C%20I%27d%20like%20to%20speak%20with%20an%20expert%20about%20windows%2C%20doors%20or%20a%20glass%20room%20for%20my%20villa.';
+  'https://wa.me/447466754555?text=Hi%20Swiftrooms%2C%20I%27d%20like%20to%20speak%20with%20an%20expert%20about%20windows%2C%20doors%20or%20a%20glass%20room%20for%20my%20villa.';
 
 /**
  * Mobile-only sticky bottom CTA bar.
