@@ -1,8 +1,10 @@
 import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { Navigation } from './components/Navigation';
 import { HeroSection } from './components/HeroSection';
+import { ThankYouPage } from './components/ThankYouPage';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { getAnimationSettings } from './utils/performance';
+import { isThankYouPath, onRouteChange } from './utils/navigation';
 
 // Lazy load performance monitor to reduce initial bundle
 const PerformanceMonitor = lazy(() => import('./components/PerformanceMonitor').then(m => ({ default: m.PerformanceMonitor })));
@@ -56,6 +58,12 @@ export default function App() {
     particleCount: 8,
   });
   const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' ? window.innerWidth < 1024 : false);
+  const [showThankYou, setShowThankYou] = useState(() => typeof window !== 'undefined' && isThankYouPath());
+
+  // The lead form navigates to /thank-you via History API on submit (see
+  // src/app/utils/navigation.ts) rather than a full page load, so the app
+  // needs to react to that itself.
+  useEffect(() => onRouteChange(() => setShowThankYou(isThankYouPath())), []);
 
   // Detect mobile devices - debounced to prevent layout thrashing
   useEffect(() => {
@@ -114,6 +122,14 @@ export default function App() {
       history.scrollRestoration = 'manual';
     }
   }, []);
+
+  if (showThankYou) {
+    return (
+      <ErrorBoundary>
+        <ThankYouPage />
+      </ErrorBoundary>
+    );
+  }
 
   return (
     <ErrorBoundary>

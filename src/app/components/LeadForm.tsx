@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef, type ReactNode } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { ChevronRight, ChevronLeft, Check, ArrowRight, Building, Home, Store, DoorOpen, Columns, RectangleVertical, Grid3x3, Sun, HardHat, Wrench, MessageCircle, MapPin, Phone, Mail, Instagram, Globe, Glasses, LayoutGrid, ChevronDown, AlertCircle, Upload, X } from 'lucide-react';
+import { ChevronRight, ChevronLeft, Check, ArrowRight, Building, Home, Store, DoorOpen, Columns, RectangleVertical, Grid3x3, Sun, HardHat, Wrench, MapPin, Phone, Mail, Instagram, Globe, Glasses, LayoutGrid, ChevronDown, AlertCircle, Upload, X } from 'lucide-react';
 import svgPaths from '../../imports/svg-c8s3lgkv08';
 import svgPathsSelection from '../../imports/svg-ws080e5oua';
 import { turnstileEnabled, getTurnstileToken } from '../utils/turnstile';
+import { goToThankYou } from '../utils/navigation';
 
 // Country codes for phone number validation
 const countryCodes = [
@@ -444,14 +445,15 @@ export function LeadForm({ autoOpen = false, ctaVariant = 'green', listenForOpen
       }
       // Remember this enquiry so an accidental resubmit doesn't double-send.
       submittedSignatureRef.current = signature;
-      setCurrentStep(totalSteps);
+      setIsFormOpen(false);
+      goToThankYou(formData.name);
     } catch (err) {
       console.error('[LeadForm] submission error:', err);
       setSubmitError('Something went wrong sending your request. Please try again, or reach us on WhatsApp.');
     } finally {
       setIsSubmitting(false);
     }
-    // On success we advance to the thank-you screen; the user returns manually.
+    // On success the visitor is taken to the dedicated /thank-you page.
   };
 
   const isStepValid = () => {
@@ -491,7 +493,6 @@ export function LeadForm({ autoOpen = false, ctaVariant = 'green', listenForOpen
   };
 
   const renderStep = () => {
-    if (currentStep >= totalSteps) return renderSuccess();
     if (isMobile) return renderMobileStep();
     switch (currentStep) {
       case 0:
@@ -739,134 +740,6 @@ export function LeadForm({ autoOpen = false, ctaVariant = 'green', listenForOpen
     }
   };
 
-  const renderSuccess = () => {
-    return (
-          <div
-            key="step-success"
-            className="text-center py-12 space-y-6"
-          >
-            <div className="w-20 h-20 lg:w-24 lg:h-24 bg-[#007969] rounded-full flex items-center justify-center mx-auto">
-              <Check className="w-10 h-10 lg:w-12 lg:h-12 text-white" strokeWidth={3} />
-            </div>
-
-            <div>
-              <h3 className="font-heading text-2xl lg:text-4xl font-semibold text-[#1c1c1e] mb-3 break-words">
-                Thank You, {formData.name}!
-              </h3>
-              <p className="font-body text-base lg:text-lg text-[#3a3a3c] mb-2">
-                We truly appreciate you taking the time to reach out to us.
-              </p>
-              <p className="font-body text-base lg:text-lg text-[#3a3a3c] mb-6">
-                Your quote request has been received and our team will contact you shortly.
-              </p>
-            </div>
-
-            <div className="bg-[#e6f4f1] border border-[#00796933] rounded-[4px] p-6 max-w-md mx-auto">
-              <div className="flex items-center justify-center gap-3 text-[#007969]">
-                <Check className="w-6 h-6 flex-shrink-0" strokeWidth={2.5} />
-                <p className="font-body text-base lg:text-lg font-medium">
-                  We respond within 12 hours
-                </p>
-              </div>
-            </div>
-
-            {/* WhatsApp CTA Card - Minimized Version */}
-            <div className="bg-white border border-[#25D366]/30 rounded-[4px] p-4 lg:p-5 max-w-sm mx-auto shadow-[0_16px_40px_#0079691f] hover:shadow-xl transition-shadow">
-              {/* Compact Header with Icon and Text - Center Aligned */}
-              <div className="flex flex-col items-center text-center gap-3 mb-3">
-                <div className="w-10 h-10 bg-[#25D366] rounded-full flex items-center justify-center flex-shrink-0">
-                  <MessageCircle className="w-5 h-5 text-white" fill="white" />
-                </div>
-                <div>
-                  <h4 className="font-heading text-base lg:text-lg font-semibold text-[#1c1c1e] leading-tight">
-                    Send Swiftrooms details & location to my phone
-                  </h4>
-                  <p className="font-body text-xs lg:text-sm text-[#6b7280]">
-                    Save our details for your visit.
-                  </p>
-                </div>
-              </div>
-
-              {/* Compact WhatsApp CTA Button */}
-              <a
-                href={`https://wa.me/447466754555?text=${encodeURIComponent(
-                  `Thank you for your enquiry. Our team will be in touch shortly, however you are welcome to contact us directly at any time.\n\n` +
-                  `YOUR INQUIRY DETAILS:\n` +
-                  `Name: ${formData.name}\n` +
-                  `Phone: ${selectedCountryCode} ${formData.phone}\n` +
-                  `Email: ${formData.email || 'Not provided'}\n` +
-                  `Property Type: ${propertyTypes.find(p => p.value === formData.propertyType)?.label || 'Not specified'}\n` +
-                  `Products Needed: ${formData.productsNeeded.map(p => products.find(prod => prod.value === p)?.label).join(', ') || 'Not specified'}\n` +
-                  `Build Stage: ${projectTypes.find(p => p.value === formData.projectType)?.label || 'Not specified'}\n` +
-                  `Site Location: ${formData.siteLocation || 'Not specified'}\n` +
-                  `Timeline: ${timelines.find(t => t.value === formData.timeline)?.label || 'Not specified'}\n\n` +
-                  `---\n\n` +
-                  `Showroom Location: ETJAR – J1 Complex, Block A, Warehouse 11 & 12, Jebel Ali Industrial Area 1, Dubai.\n\n` +
-                  `For directions, please use Google Maps:\n` +
-                  `https://maps.google.com/?q=ETJAR+J1+Complex+Block+A+Warehouse+11-12+Jebel+Ali+Industrial+Area+1+Dubai\n\n` +
-                  `Call on +971 4 347 4240, or visit www.swiftrooms.ae\n` +
-                  `We look forward to welcoming you to our showroom soon!\n\n` +
-                  `The Swiftrooms Team`
-                )}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-whatsapp w-full text-sm lg:text-base shadow-md hover:shadow-lg transition-all duration-300"
-              >
-                <MessageCircle className="w-4 h-4" />
-                <span>Send to My Phone</span>
-                <ArrowRight className="w-4 h-4" />
-              </a>
-            </div>
-
-            <button
-              onClick={() => {
-                // Check if mobile
-                const isMobile = window.innerWidth < 1024;
-
-                // Reset form data
-                setFormData({
-                  name: '',
-                  phone: '',
-                  email: '',
-                  propertyType: '',
-                  productsNeeded: [] as string[],
-                  projectType: '',
-                  siteLocation: '',
-                  timeline: '',
-                  message: '',
-                  privacyConsent: false,
-                  marketingConsent: false,
-                });
-                setFiles([]);
-                setCurrentStep(0);
-                setJourneyType('quote');
-
-                if (isMobile) {
-                  // On mobile: Close form WITHOUT showing the menu button
-                  setIsFormOpen(false);
-                  setShowMenu(false); // Don't show "Start Your Swiftrooms Journey" button
-
-                  // Scroll to hero section
-                  setTimeout(() => {
-                    const heroSection = document.getElementById('hero');
-                    if (heroSection) {
-                      heroSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    } else {
-                      window.scrollTo({ top: 0, behavior: 'smooth' });
-                    }
-                  }, 300);
-                } else {
-                  // On desktop: Reset form for another submission
-                  // Keep form open and return to the first step
-                }
-              }}
-              className="text-[#007969] font-body text-sm lg:text-base font-medium hover:underline"
-            >
-              {window.innerWidth < 1024 ? 'Return to Home' : 'Submit another request'}
-            </button>
-          </div>
-        );
-  };
 
   // Typeform-style single-question screen for mobile. `wrap` is a plain JSX
   // helper (not a component) so inputs keep focus across re-renders.
