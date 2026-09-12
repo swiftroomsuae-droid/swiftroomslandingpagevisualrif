@@ -354,7 +354,8 @@ export function LeadForm({ autoOpen = false, ctaVariant = 'green', listenForOpen
     // Honeypot tripped → almost certainly a bot. Show the normal success
     // screen so we don't reveal the trap, but never send the payload.
     if (honeypot.trim() !== '') {
-      setCurrentStep(totalSteps);
+      setIsFormOpen(false);
+      goToThankYou(formData.name);
       return;
     }
 
@@ -366,8 +367,14 @@ export function LeadForm({ autoOpen = false, ctaVariant = 'green', listenForOpen
 
     setIsSubmitting(true);
 
+    const trimmedName = formData.name.trim();
+    const [firstName, ...lastNameParts] = trimmedName.split(/\s+/);
+    const lastName = lastNameParts.join(' ');
+
     const payload = {
-      name: formData.name,
+      name: trimmedName,
+      firstName: firstName || '',
+      lastName,
       phone: `${selectedCountryCode} ${formData.phone}`,
       email: formData.email || '',
       propertyType: propertyTypes.find(p => p.value === formData.propertyType)?.label || formData.propertyType,
@@ -389,7 +396,8 @@ export function LeadForm({ autoOpen = false, ctaVariant = 'green', listenForOpen
     const signature = `${payload.name}|${payload.phone}|${payload.email}|${payload.productsNeeded.join(',')}`;
     if (submittedSignatureRef.current === signature) {
       setIsSubmitting(false);
-      setCurrentStep(totalSteps);
+      setIsFormOpen(false);
+      goToThankYou(formData.name);
       return;
     }
 
