@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { MessageCircle } from 'lucide-react';
+import { trackWhatsAppClick } from '../utils/tracking';
 
 const WHATSAPP_HREF =
   'https://wa.me/447466754555?text=Hi%20Swiftrooms%2C%20I%27d%20like%20to%20speak%20with%20an%20expert%20about%20windows%2C%20doors%20or%20a%20glass%20room%20for%20my%20villa.';
@@ -113,6 +114,7 @@ export function StickyMobileCTA() {
               href={WHATSAPP_HREF}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={trackWhatsAppClick}
               className="btn-whatsapp flex-1 !px-3 min-h-11 whitespace-nowrap"
               aria-label="Message a WhatsApp expert"
             >

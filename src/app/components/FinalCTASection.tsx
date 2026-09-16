@@ -1,5 +1,6 @@
 import { motion } from 'motion/react';
 import { ArrowRight, MessageCircle, MapPin, Star, CalendarCheck, Ruler, FileText, BookOpen } from 'lucide-react';
+import { trackWhatsAppClick } from '../utils/tracking';
 
 const WHATSAPP_HREF =
   'https://wa.me/447466754555?text=Hi%20Swiftrooms%2C%20I%27d%20like%20to%20speak%20with%20an%20expert%20about%20windows%2C%20doors%20or%20a%20glass%20room%20for%20my%20villa.';
@@ -97,6 +98,7 @@ export function FinalCTASection() {
               href={WHATSAPP_HREF}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={trackWhatsAppClick}
               className="btn-whatsapp w-full sm:w-auto shadow-lg"
             >
               <MessageCircle className="w-5 h-5" />
@@ -139,6 +141,7 @@ export function FinalCTASection() {
                     href={magnet.href}
                     target="_blank"
                     rel="noopener noreferrer"
+                    onClick={trackWhatsAppClick}
                     className="flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl px-3 py-2.5 text-left transition-colors duration-200"
                   >
                     <Icon className="w-4 h-4 lg:w-5 lg:h-5 flex-shrink-0 text-[#FFC857]" />

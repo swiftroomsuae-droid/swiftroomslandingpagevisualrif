@@ -1,6 +1,8 @@
+import { useEffect } from 'react';
 import { Check, MessageCircle, ArrowRight } from 'lucide-react';
 import { Navigation } from './Navigation';
 import { goHome, getStoredLeadName } from '../utils/navigation';
+import { trackThankYouPageView, trackWhatsAppClick } from '../utils/tracking';
 
 const WHATSAPP_HREF =
   'https://wa.me/447466754555?text=Hi%20Swiftrooms%2C%20I%27d%20like%20to%20speak%20with%20an%20expert%20about%20windows%2C%20doors%20or%20a%20glass%20room%20for%20my%20villa.';
@@ -13,6 +15,10 @@ const WHATSAPP_HREF =
  */
 export function ThankYouPage() {
   const name = getStoredLeadName();
+
+  useEffect(() => {
+    trackThankYouPageView();
+  }, []);
 
   return (
     <div className="min-h-[100dvh] flex flex-col bg-white">
@@ -47,6 +53,7 @@ export function ThankYouPage() {
             href={WHATSAPP_HREF}
             target="_blank"
             rel="noopener noreferrer"
+            onClick={trackWhatsAppClick}
             className="btn-whatsapp inline-flex items-center justify-center gap-2 max-w-sm w-full mx-auto shadow-md hover:shadow-lg transition-all duration-300"
           >
             <MessageCircle className="w-4 h-4" />
