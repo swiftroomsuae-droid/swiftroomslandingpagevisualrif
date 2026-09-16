@@ -2,6 +2,7 @@ import { useMemo, useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Instagram, MessageCircle, MapPin } from 'lucide-react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
+import { trackWhatsAppClick } from '../utils/tracking';
 
 // Figma-hosted project imagery (same assets as the previous showcase)
 import imgComponent42 from "figma:asset/b652f7273996c3088ffbdf6b375a00ac50d72203.png";
@@ -392,6 +393,7 @@ export function GallerySection() {
               href={WHATSAPP_EXPERT_URL}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={trackWhatsAppClick}
               className="btn-whatsapp w-full sm:w-auto"
             >
               <MessageCircle className="h-5 w-5" />

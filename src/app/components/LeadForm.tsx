@@ -5,6 +5,7 @@ import svgPaths from '../../imports/svg-c8s3lgkv08';
 import svgPathsSelection from '../../imports/svg-ws080e5oua';
 import { turnstileEnabled, getTurnstileToken } from '../utils/turnstile';
 import { goToThankYou } from '../utils/navigation';
+import { trackLeadFormSubmit } from '../utils/tracking';
 
 // Country codes for phone number validation
 const countryCodes = [
@@ -453,6 +454,7 @@ export function LeadForm({ autoOpen = false, ctaVariant = 'green', listenForOpen
       }
       // Remember this enquiry so an accidental resubmit doesn't double-send.
       submittedSignatureRef.current = signature;
+      trackLeadFormSubmit();
       setIsFormOpen(false);
       goToThankYou(formData.name);
     } catch (err) {
