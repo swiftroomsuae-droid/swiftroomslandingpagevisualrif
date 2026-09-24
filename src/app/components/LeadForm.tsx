@@ -6,6 +6,7 @@ import svgPathsSelection from '../../imports/svg-ws080e5oua';
 import { turnstileEnabled, getTurnstileToken } from '../utils/turnstile';
 import { goToThankYou } from '../utils/navigation';
 import { trackLeadFormSubmit } from '../utils/tracking';
+import { uploadAttachments, MAX_UPLOAD_BYTES } from '../utils/uploadAttachments';
 
 // Country codes for phone number validation
 const countryCodes = [
@@ -89,11 +90,10 @@ const validatePhone = (phone: string, countryCode: string): { isValid: boolean; 
 };
 
 // --- Client-side file-attachment guardrails (Phase 9/10) -----------------
-// Files are never uploaded to a third party by this form (only their names are
-// sent with the lead), but we still validate on selection to protect the user
-// and keep the payload sane.
-const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10 MB per file
-const MAX_FILES = 8;
+// Attachments are uploaded to LeadOptimizer Media Storage on submit (see
+// utils/uploadAttachments) and their CRM links sent with the lead.
+const MAX_FILE_SIZE = MAX_UPLOAD_BYTES; // 4 MB per file
+const MAX_FILES = 5;
 const ALLOWED_FILE_TYPES = [
   'image/jpeg',
   'image/png',
@@ -166,7 +166,7 @@ export function LeadForm({ autoOpen = false, ctaVariant = 'green', listenForOpen
         return false;
       }
       if (f.size > MAX_FILE_SIZE) {
-        rejected.push(`${f.name} (over 10 MB)`);
+        rejected.push(`${f.name} (over 4 MB — please send it via WhatsApp)`);
         return false;
       }
       return true;
@@ -400,6 +400,12 @@ export function LeadForm({ autoOpen = false, ctaVariant = 'green', listenForOpen
       setIsFormOpen(false);
       goToThankYou(formData.name);
       return;
+    }
+
+    // Upload attachments to LeadOptimizer Media Storage so the lead carries
+    // CRM links ("1) plan.pdf — https://…") instead of bare file names.
+    if (files.length > 0) {
+      payload.fileNames = await uploadAttachments(files);
     }
 
     // Direct fallback: POST straight to VITE_LEAD_ENDPOINT (Formspree/webhook).
@@ -707,7 +713,7 @@ export function LeadForm({ autoOpen = false, ctaVariant = 'green', listenForOpen
               <label className="flex items-center gap-3 w-full px-4 py-3.5 border-2 border-dashed border-[#e5e7eb] rounded-md cursor-pointer hover:border-[#007969]/50 transition-colors">
                 <Upload className="w-5 h-5 text-[#007969] flex-shrink-0" />
                 <span className="font-body text-sm text-[#6b7280] truncate">
-                  {files.length > 0 ? `${files.length} file${files.length !== 1 ? 's' : ''} selected` : 'Browse to attach (PDF, JPG, PNG)'}
+                  {files.length > 0 ? `${files.length} file${files.length !== 1 ? 's' : ''} selected` : 'Browse to attach (PDF, JPG, PNG · max 4 MB each)'}
                 </span>
                 <input type="file" multiple accept="image/jpeg,image/png,image/webp,image/gif,application/pdf"
                   onChange={(e) => handleFileSelect(e.target.files)}
@@ -935,7 +941,7 @@ export function LeadForm({ autoOpen = false, ctaVariant = 'green', listenForOpen
             <label className="flex items-center gap-3 w-full px-4 py-3.5 border-2 border-dashed border-[#e5e7eb] rounded-xl cursor-pointer active:border-[#007969]/50">
               <Upload className="w-5 h-5 text-[#007969] flex-shrink-0" />
               <span className="font-body text-sm text-[#6b7280] truncate">
-                {files.length > 0 ? `${files.length} file${files.length !== 1 ? 's' : ''} selected` : 'Attach plans or photos (PDF, JPG, PNG)'}
+                {files.length > 0 ? `${files.length} file${files.length !== 1 ? 's' : ''} selected` : 'Attach plans or photos (PDF, JPG, PNG · max 4 MB each)'}
               </span>
               <input type="file" multiple accept="image/jpeg,image/png,image/webp,image/gif,application/pdf"
                 onChange={(e) => handleFileSelect(e.target.files)} className="hidden" />
@@ -1079,7 +1085,7 @@ export function LeadForm({ autoOpen = false, ctaVariant = 'green', listenForOpen
                     : 'inline-flex items-center justify-center gap-2 px-8 rounded-[2px] font-accent uppercase tracking-[.12em] font-semibold bg-[#e5e7eb] text-[#6b7280] cursor-not-allowed'
                 }`}
               >
-                {isSubmitting ? 'Sending…' : currentStep === totalSteps - 1 ? 'Submit Enquiry' : 'Continue'}
+                {isSubmitting ? (files.length > 0 ? 'Uploading files…' : 'Sending…') : currentStep === totalSteps - 1 ? 'Submit Enquiry' : 'Continue'}
                 {!isSubmitting && <ChevronRight className="w-4 h-4 lg:w-5 lg:h-5" />}
               </button>
             </div>
